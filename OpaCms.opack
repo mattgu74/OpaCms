@@ -1,0 +1,14 @@
+-I ../opaCas
+# the editor package
+OpaCms.editor.opx
+mattgu74.cas.opx
+#the packages
+
+# page (template)
+src/page.data.opa
+src/page.client.opa
+src/page.server.opa
+
+# main
+src/main.opa
+
