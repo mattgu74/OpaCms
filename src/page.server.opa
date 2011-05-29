@@ -9,6 +9,10 @@ import OpaCms.editor
 
 type Page.conf = { url :string ; admin : {true : string} / {false} }
 
+type message = { reload_url : string }
+
+room = Network.cloud("room"): Network.network(message)
+
 @server Page_server(c : option(Page.conf)) = {{
 
   conf = Option.default({url="" ; admin = {false}}, c) 
@@ -32,6 +36,7 @@ type Page.conf = { url :string ; admin : {true : string} / {false} }
   // on ready
   ready() =
     do Debug.jlog("Page_server : ready")
+    do Network.add_callback(message_from_room, room)
     match conf.admin with
       | {true = u} -> Page_client.admin_interface(save, change_url, change_parent, admin_data())
       | {false} -> void
@@ -67,7 +72,7 @@ type Page.conf = { url :string ; admin : {true : string} / {false} }
              sub_page = myPage.sub_page ; 
              content = content }
     do Page_data.save(conf.url, page)
-    refresh()
+    Network.broadcast({reload_url = conf.url}, room)
 
   admin_data() =
     myPage = Page_data.get(Page_data.mk_ref(conf.url))
@@ -81,4 +86,13 @@ type Page.conf = { url :string ; admin : {true : string} / {false} }
      Parent page : <br/>
     <select id=#admin_parent>{options}</select><br/></>
     , Option.default("none", myPage.parent_page))
+
+  message_from_room(msg : message)=
+    match msg with
+     | {reload_url = url} -> match String.compare(url, conf.url)
+                              | {eq} -> refresh()
+                              | _ -> void // A page has just been edit, but i'm not on it
+                             end
+     | _ -> Debug.jlog("message not understand")
+
 }}
