@@ -29,7 +29,6 @@ import OpaCms.editor
     admin_tools(url, parent, data) // Add optional edit like url or page_parent
 
   editable(div : dom, fun) =
-    do Debug.jlog("Page_client: editable")
     Editor.addInstance(div, fun) // div is editable and save is the callback function
 
   admin_tools(url, parent, data) = 

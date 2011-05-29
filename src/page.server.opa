@@ -9,7 +9,7 @@ import OpaCms.editor
 
 type Page.conf = { url :string ; admin : {true : string} / {false} }
 
-type message = { reload_url : string }
+type message = { reload_url : string } / { move_from : string; move_to : string } / {change_menu}
 
 room = Network.cloud("room"): Network.network(message)
 
@@ -51,12 +51,12 @@ room = Network.cloud("room"): Network.network(message)
                  | "none" -> {none}
                  | a -> {some = Page_data.mk_ref(a)}
     do Page_data.set_parent(Page_data.mk_ref(conf.url), newparent)
-    refresh()
+    Network.broadcast({change_menu}, room)
 
   change_url() =
     url = Page_client.get_url()
     do Page_data.move(Page_data.mk_ref(conf.url), Page_data.mk_ref(url))
-    Client.goto(url)
+    Network.broadcast({move_from = conf.url ; move_to = url}, room)
 
   save() =
     (title, content) = Page_client.get()
@@ -93,6 +93,11 @@ room = Network.cloud("room"): Network.network(message)
                               | {eq} -> refresh()
                               | _ -> void // A page has just been edit, but i'm not on it
                              end
+     | {~move_from ; ~move_to} -> match String.compare(move_from, conf.url)
+                              | {eq} -> Client.goto(move_to)
+                              | _ -> refresh() // A page has just move, but it's not my actual page, I must refresh the menu
+                             end
+     | {change_menu} -> refresh() // someone change the menu
      | _ -> Debug.jlog("message not understand")
 
 }}
