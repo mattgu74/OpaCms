@@ -10,6 +10,7 @@ import OpaCms.editor
 @client Page_client = {{
 
   load(page : Page.t, menu : xhtml) =
+    do Client.setTitle("[OpaCms] - {page.title}")
     do Dom.transform([#page_header <- <h1>{page.title}</h1>])
     do Dom.transform([#page_content <- <>{Xhtml.of_string_unsafe(page.content)}</>])
     do Dom.transform([#page_sidebar <- <>{menu}</>])
