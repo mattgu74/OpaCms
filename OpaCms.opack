@@ -4,6 +4,9 @@ OpaCms.editor.opx
 mattgu74.cas.opx
 #the packages
 
+# user
+src/user.opa
+
 # page (template)
 src/page.data.opa
 src/page.client.opa

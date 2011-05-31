@@ -5,20 +5,14 @@
 
 package OpaCms.main
 import OpaCms.page
-import mattgu74.cas // Use CAS authentification
-
-cas_conf = {
-  url = "https://cas.utc.fr/cas/" ; 
-  service = "http://localhost:8080"
- } : Cas.config
-
-myCas = Cas(cas_conf)
+import OpaCms.user
 
 render_page(url : string) =
-  status = myCas.get_status()
+  status = User.get_status()
   admin = match status with
-           | {logged = user} -> do Debug.jlog(user) 
-                                {true = user}
+           | {logged = u} -> user = User_data.ref_to_string(u)
+                             do Debug.jlog(user) 
+                             {true = user}
            | {unlogged} -> {false}
   page = Page_server(Option.some({~url ; ~admin}))
   body = page.default_template
@@ -28,7 +22,7 @@ render_page(url : string) =
 urls : Parser.general_parser(http_request -> resource) =
   parser
   | {Rule.debug_parse_string(s -> jlog("URL: {s}"))} Rule.fail -> error("")  
-  | result={myCas.resource} -> _req ->
+  | result={User.resource} -> _req ->
       result
   | "/resources/nicEdit.js" .* -> _req -> @static_resource("./resources/nicEdit.js")
   | url=(.*) -> _req ->
