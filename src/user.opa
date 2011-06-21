@@ -78,10 +78,10 @@ User = {{
          | _ -> Option.none
     WLoginbox.html(WLoginbox.default_config, "login_box", login, user_opt)
 
-  resource : Parser.general_parser(resource) =
+  resource : Parser.general_parser(http_request -> resource) =
     parser
     | .* ->
-      start()
+      _req -> start()
 }}
 
 

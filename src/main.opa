@@ -22,14 +22,10 @@ render_page(url : string) =
 urls : Parser.general_parser(http_request -> resource) =
   parser
   | {Rule.debug_parse_string(s -> jlog("URL: {s}"))} Rule.fail -> error("")  
-  | "/user" result={User.resource} -> 
-    (_req ->
-      result)
+  | "/user" result={User.resource} -> result
   | "/resources/nicEdit.js" .* -> 
-    (_req -> 
-      @static_resource("./resources/nicEdit.js"))
+    _req -> @static_resource("./resources/nicEdit.js")
   | url=(.*) -> 
-    (_req ->
-      render_page(Text.to_string(url)))
+    _req -> render_page(Text.to_string(url))
 
 server = Server.make(Resource.add_auto_server(@static_resource_directory("resources"), urls))
