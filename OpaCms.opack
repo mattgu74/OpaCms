@@ -1,7 +1,6 @@
 -I ../opaCas
 # the editor package
 OpaCms.editor.opx
-mattgu74.cas.opx
 #the packages
 
 # user
