@@ -6,6 +6,7 @@
 
 package OpaCms.page
 import OpaCms.editor
+import stdlib.web.client
 
 type Page.conf = { url :string ; admin : {true : string} / {false} }
 
@@ -29,7 +30,6 @@ room = Network.cloud("room"): Network.network(message)
                           <div id=#page_header ><h1>{myPage.title}</h1></div>
                           <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
                           <div id=#page_sidebar >{menu}</>
-                          <div id=#tools />
                           <div id=#page_footer> OpaCms - Author Matthieu Guffroy </div>
                      </div> 
 

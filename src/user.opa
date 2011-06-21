@@ -4,7 +4,9 @@
 **/
 
 package OpaCms.user
-import widgets.loginbox
+import stdlib.widgets.loginbox
+import stdlib.crypto
+import stdlib.web.client
 // DATA
 
 @abstract type User.passwd = string
