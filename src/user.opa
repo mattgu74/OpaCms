@@ -80,7 +80,7 @@ User = {{
 
   resource : Parser.general_parser(resource) =
     parser
-    | "/user" .* ->
+    | .* ->
       start()
 }}
 

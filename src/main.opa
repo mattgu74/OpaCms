@@ -22,7 +22,7 @@ render_page(url : string) =
 urls : Parser.general_parser(http_request -> resource) =
   parser
   | {Rule.debug_parse_string(s -> jlog("URL: {s}"))} Rule.fail -> error("")  
-  | result={User.resource} -> _req ->
+  | "/user" result={User.resource} -> _req ->
       result
   | "/resources/nicEdit.js" .* -> _req -> @static_resource("./resources/nicEdit.js")
   | url=(.*) -> _req ->
