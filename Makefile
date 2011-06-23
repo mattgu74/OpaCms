@@ -6,7 +6,7 @@ opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx src/main.opa
 OpaCms.user.opx: src/user.opa
 	opa $^  --no-server --autobuild --api
 
-OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa
+OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa
 	opa $^ --no-server --autobuild --api
 
 OpaCms.editor.opx: editor.opp editor/editor.opa
