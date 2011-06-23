@@ -55,6 +55,11 @@ User = {{
   get_status() = 
     UserContext.execute((a -> a), state)
 
+  is_logged() = 
+    match get_status() with
+     | { logged = _ } -> true
+     | { unlogged } -> false
+
   login(login, passwd) =
     useref = User_data.mk_ref(login)
     user = User_data.get(useref)
@@ -71,6 +76,17 @@ User = {{
   start() =
     Resource.html("User module", <h1>Module User</h1><div id=#login_box>{loginbox()}</>)
 
+  edit() = 
+    if User.is_logged() then
+      Resource.html("User module", <h1>Module User</h1><>Under construction</>)
+    else
+      start()
+
+  view(login : string) =
+    match User_data.get(User_data.mk_ref(login)) with
+     | { none } -> Resource.html("User module", <h1>Module User</h1><>Error, the user {login} does'nt exist</>)
+     | { some = u } -> Resource.html("User module", <h1>Module User</h1><>This the public profil of {login}, this page is under construction</>)
+
   loginbox() : xhtml =
     user_opt = 
        match get_status() with 
@@ -80,6 +96,10 @@ User = {{
 
   resource : Parser.general_parser(http_request -> resource) =
     parser
+    | "/edit" ->
+      _req -> edit()
+    | "/view/" login=(.*) ->
+      _req -> view(Text.to_string(login))
     | .* ->
       _req -> start()
 }}
