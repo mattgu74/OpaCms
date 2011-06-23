@@ -3,15 +3,18 @@
  *
  */
 
-package OpaCms.main
 import OpaCms.page
 import OpaCms.user
+import stdlib.core.web.server
+import stdlib.core
+
+base_url = Server_private.base_url
 
 render_page(url : string) =
   status = User.get_status()
   admin = match status with
            | {logged = u} -> user = User_data.ref_to_string(u)
-                             do Debug.jlog(user) 
+                             do Log.info("admin access", user) 
                              {true = user}
            | {unlogged} -> {false}
   page = Page_server(Option.some({~url ; ~admin}))
@@ -21,7 +24,7 @@ render_page(url : string) =
 
 urls : Parser.general_parser(http_request -> resource) =
   parser
-  | {Rule.debug_parse_string(s -> jlog("URL: {s}"))} Rule.fail -> error("")  
+  | {Rule.debug_parse_string(s -> Log.notice("URL",s))} Rule.fail -> error("")  
   | "/user" result={User.resource} -> result
   | "/resources/nicEdit.js" .* -> 
     _req -> @static_resource("./resources/nicEdit.js")
