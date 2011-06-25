@@ -65,12 +65,7 @@ room = Network.cloud("room"): Network.network(message)
   save_in_db(title, content) =
     myPage = Page_data.get(Page_data.mk_ref(conf.url))
     do Debug.jlog("try to save")
-    page = { title = title ; 
-             resume = myPage.resume ; 
-             url = conf.url ; 
-             parent_page = myPage.parent_page ; 
-             sub_page = myPage.sub_page ; 
-             content = content }
+    page = { myPage with title = title ; content = content }
     do Page_data.save(conf.url, page)
     Network.broadcast({reload_url = conf.url}, room)
 

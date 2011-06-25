@@ -17,7 +17,8 @@ type Page.t = {
  url : string ;
  parent_page : option(Page.ref) ;
  sub_page : list(Page.ref) ;
- content : string
+ content : string ;
+ style : Page_css.style ;
 }
 
 type Page.map('a) = ordered_map(Page.ref, 'a, String.order)
@@ -27,12 +28,22 @@ Page_data = {{
  default_page = { title = "Error 404 - Page not found" ; 
                resume = "" ; 
                url="/404" ; 
-               parent_page = {none} ; 
-               sub_page = {nil} ; 
+               parent_page = Option.none ; 
+               sub_page = [] ; 
                //content = Template.text("Page not found !") 
-               content = "Page not found !" 
+               content = "Page not found !" ;
+               style = [] ;
                }
 
+  empty_page = { 
+    title = "" ;
+    resume = "";
+    url = "" ;
+    parent_page = Option.none ;
+    sub_page = [] ;
+    content = "" ;
+    style = [] ;
+  }
 
   mk_ref( url : string ) : Page.ref =
     String.to_lower(url)
@@ -41,7 +52,7 @@ Page_data = {{
     String.compare(a,b)
 
   create( url : string ) : Page.t =
-    page = { title = "Titre" ; resume = "Resume" ; ~url ; parent_page = {none} ; sub_page = {nil} ; content = "Cette page vient d'être créé." }
+    page = { empty_page with title = "Titre" ; resume = "Resume" ; ~url ; content = "Cette page vient d'être créé." }
     do /pages[mk_ref(url)] <- page
     page
 
@@ -50,6 +61,9 @@ Page_data = {{
 
   get( page_ref : Page.ref ) : Page.t =
     Option.default(default_page ,?/pages[page_ref])
+
+  get_style( page_ref ) =
+    Option.default([], ?/pages[page_ref]/style)
 
   submenu(value, acc) =
     page = get(value)
@@ -82,12 +96,7 @@ Page_data = {{
         match ?/pages[newref] with
          | {some = _} -> void // Exit because next page exist
          | {none} ->
-               newpage = {title = oldpage.title ; 
-                 resume = oldpage.resume ; 
-                 url= newurl ; 
-                 parent_page = oldpage.parent_page ; 
-                 sub_page = oldpage.sub_page ;  
-                 content = oldpage.content }
+               newpage = { oldpage with url = newurl }
                do /pages[newref] <- newpage
                Db.remove(@/pages[old])
          end
@@ -114,13 +123,6 @@ Page_data = {{
           | {some = pref} ->
             // Add the ref to the subpage list of the new parent
             /pages[pref]/sub_page <- List.add(ref, /pages[pref]/sub_page)
-
-      newpage = {title = page.title ; 
-               resume = page.resume ; 
-               url= page.url ; 
-               parent_page = parent ; 
-               sub_page = page.sub_page ;  
-               content = page.content }
-      /pages[ref] <- newpage
+      /pages[ref]/parent_page <- parent
 }}
 
