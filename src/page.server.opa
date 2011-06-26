@@ -30,7 +30,7 @@ room = Network.cloud("room"): Network.network(message)
                                               end 
                                     }
                             | {false} ->
-                                    { js = <></>; title = <></> }
+                                    { js = <></>; title = <>{myPage.title}</> }
                            end
                    <>{load.js}</>
                    <div id=#page_wrap onready={_ -> ready()}>
