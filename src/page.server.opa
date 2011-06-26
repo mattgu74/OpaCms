@@ -22,16 +22,23 @@ room = Network.cloud("room"): Network.network(message)
                    myPage = Page_data.get(Page_data.mk_ref(conf.url))
                    menu = Page_data.get_xhtml_menu(Page_data.mk_ref(conf.url))
                    load = match conf.admin with
-                            | {true = _} -> <>{Editor.load}</>
-                            | {false} -> <></>
+                            | {true = _} ->
+                                    { js = <>{Editor.load}</>;
+                                      title = match myPage.title with
+                                                | "" -> <>Titre vide</>
+                                                | _ -> <>{myPage.title}</>
+                                              end 
+                                    }
+                            | {false} ->
+                                    { js = <></>; title = <></> }
                            end
-                     <>{load}</>
-                     <div id=#page_wrap onready={_ -> ready()}>
-                          <div id=#page_header ><h1>{myPage.title}</h1></div>
+                   <>{load.js}</>
+                   <div id=#page_wrap onready={_ -> ready()}>
+                          <div id=#page_header ><h1>{load.title}</h1></div>
                           <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
                           <div id=#page_sidebar >{menu}</>
                           <div id=#page_footer> OpaCms - Author Matthieu Guffroy </div>
-                     </div> 
+                   </div> 
 
   // on ready
   ready() =
