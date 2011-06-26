@@ -1,16 +1,16 @@
 all: opacms.exe
 
 opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx src/main.opa
-	opa $^ -o opacms.exe --autobuild
+	opa $^ -o opacms.exe
 
 OpaCms.user.opx: src/user.opa
-	opa $^  --no-server --autobuild --api
+	opa $^  --no-server --autocompile
 
 OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa
-	opa $^ --no-server --autobuild --api
+	opa $^ --no-server --autocompile
 
 OpaCms.editor.opx: editor.opp editor/editor.opa
-	opa $^ --no-server --autobuild --api
+	opa $^ --no-server --autocompile
 
 editor.opp: editor/editor.js
 	opa-plugin-builder $^ -o $@
