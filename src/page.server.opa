@@ -23,14 +23,14 @@ room = Network.cloud("room"): Network.network(message)
                    menu = Page_data.get_xhtml_menu(Page_data.mk_ref(conf.url))
                    load = match conf.admin with
                             | {true = _} ->
-                                    { js = <>{Editor.load}</>;
+                                    { js = Editor.load ;
                                       title = match myPage.title with
-                                                | "" -> <>Titre vide</>
-                                                | _ -> <>{myPage.title}</>
+                                                | "" -> "Titre vide"
+                                                | _ -> myPage.title
                                               end 
                                     }
                             | {false} ->
-                                    { js = <></>; title = <>{myPage.title}</> }
+                                    { js = <></>; title = myPage.title }
                            end
                    <>{load.js}</>
                    <div id=#page_wrap onready={_ -> ready()}>
