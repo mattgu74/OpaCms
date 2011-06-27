@@ -65,28 +65,41 @@ Page_data = {{
   get_style( page_ref ) =
     Option.default([], ?/pages[page_ref]/style)
 
-  submenu(value, acc) =
-    page = get(value)
-    func(a) = match a with
-                    | {nil} -> <></>
-                    | _ -> <ul>{List.fold(submenu, a, <></>)}</ul>
-                   end
-    <>{acc}<li><a href="{page.url}" >{page.title}</a>
-                {func(page.sub_page)}
-           </li></>
+  /*
+  Fonction appellée par get_xhtml_menu,
+  Elle permet de faire un lien vers une page et de lister ces éventuels sous pages réccursivement.
+  <li>
+        <a href="...">Titre</a>
+        <ul>
+                {sous pages}
+        </ul>
+  </li>
+  */
+  rec_xhtml_menu( p_ref : Page.ref, acc : xhtml) : xhtml = 
+        p = get(p_ref)
+        submenu = match p.sub_page with
+              | {nil} -> <></>
+              | _ -> <ul>{List.fold(rec_xhtml_menu, p.sub_page, <></>)}</ul>
+              end
+        <>{acc}
+        <li>
+                <a href="{p.url}" >{p.title}</a>
+                {submenu}
+        </li>
+        </>
 
-  menu(key, value, acc) =
-    func(a) = match a with
-                    | {nil} -> <></>
-                    | _ -> <ul>{List.fold(submenu, a, <></>)}</ul>
-    match value.parent_page with
-      | {none} -> <>{acc}<li><a href="{value.url}" >{value.title}</a>
-                  {func(value.sub_page)}
-                         </li></>
-      | _ -> acc
-
+  /*
+  Lister les pages sous forme d'une arborescence, avec un lien (page.url, page.title) vers chacune d'elles.
+  */
   get_xhtml_menu( page_actuel : Page.ref) : xhtml =
-    <ul>{Map.fold(menu, /pages, <></>)}</ul>
+    pages = Map.To.val_list(/pages)
+    pages = List.filter(p -> if p.parent_page == {none} then {true} else {false}, pages)
+    pages = List.map(p -> mk_ref(p.url), pages)
+    <>
+    <ul>
+            {List.fold(rec_xhtml_menu, pages, <></>)}
+    </ul>
+    </>
 
   move( old : Page.ref, newurl : string ) =
     match ?/pages[old] with
