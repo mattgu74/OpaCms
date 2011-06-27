@@ -34,9 +34,9 @@ room = Network.cloud("room"): Network.network(message)
                            end
                    <>{load.js}</>
                    <div id=#page_wrap onready={_ -> ready()}>
-                          <div id=#page_header ><h1>{load.title}</h1></div>
-                          <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
+                          <div id=#page_header><h1>{load.title}</h1></div>
                           <div id=#page_sidebar >{menu}</>
+                          <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
                           <div id=#page_footer> OpaCms - Author Matthieu Guffroy </div>
                    </div> 
 
@@ -86,10 +86,11 @@ room = Network.cloud("room"): Network.network(message)
          | {eq} -> a
          | _ -> <>{a}</><option value={k}>{v.title}</option>
     options = Map.fold( func, Page_data.getAll(), <option value="none">  </option>)
-    (<>Url : <br/>
-    <input id=#admin_url value={Page_data.mk_ref(conf.url)} /><br />
-     Parent page : <br/>
-    <select id=#admin_parent>{options}</select><br/></>
+    (<><label for="#admin_url">Url : </label>
+    <input id=#admin_url value={Page_data.mk_ref(conf.url)} />
+    <br />
+    <label for="#admin_parent">Parent page : </label>
+    <select id=#admin_parent>{options}</select></>
     , Option.default("none", myPage.parent_page))
 
   message_from_room(msg : message)=

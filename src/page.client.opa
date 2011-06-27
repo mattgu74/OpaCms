@@ -26,7 +26,7 @@ import stdlib.web.client
 
   admin_interface(save, url, parent, data) =
     do Editor.add_toolbar() // add toolbar
-    do Dom.transform([#toolbar -<- <span onclick={_ -> Dom.toggle(#tbar)}> [editor] </><span onclick={_ -> Dom.toggle(#tools)}> [params] </>]) 
+    do Dom.transform([#toolbar -<- <span onclick={_ -> Dom.toggle(#tbar)}> [editor] </><span onclick={_ -> Dom.toggle(#tools)}> [params] </><br/>]) 
     do Dom.transform([#toolbar +<- <div id=#tools />])
     do editable(#page_header, save) // #page_header is editable
     do editable(#page_content, save) // #page_content is editable
