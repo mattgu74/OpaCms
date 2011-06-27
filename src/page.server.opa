@@ -37,7 +37,7 @@ room = Network.cloud("room"): Network.network(message)
                           <div id=#page_header><h1>{load.title}</h1></div>
                           <div id=#page_sidebar >{menu}</>
                           <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
-                          <div id=#page_footer> OpaCms - Author Matthieu Guffroy </div>
+                          <div id=#page_footer>{Option.default("",Page_config.get(conf.url).footer)}</div>
                    </div> 
 
   // on ready
