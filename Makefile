@@ -1,20 +1,31 @@
-all: opacms.exe
+
+OPA=opa
+OPADOC=opadoc
+EXE=opacms.exe
+
+all: $(EXE)
 
 opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx src/main.opa
-	opa $^ -o opacms.exe
+	$(OPA) $^ -o $(EXE)
 
 OpaCms.user.opx: src/user.opa
-	opa $^  --no-server --autocompile
+	$(OPA) $^  --no-server --autocompile
 
 OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa
-	opa $^ --no-server --autocompile
+	$(OPA) $^ --no-server --autocompile
 
 OpaCms.editor.opx: editor.opp editor/editor.opa
-	opa $^ --no-server --autocompile
+	$(OPA) $^ --no-server --autocompile
 
 editor.opp: editor/editor.js
 	opa-plugin-builder $^ -o $@
 
+doc:    all
+	$(OPA) src/*.opa --api
+	$(OPADOC) src -o doc
+
+new-db:	all
+	./$(EXE) --force-db-upgrade
 
 clean:
 	rm -rf _build _tracks
@@ -22,3 +33,5 @@ clean:
 	rm -rf *.log
 	rm -rf *.opp
 	rm -rf *.opx
+	rm -rf *.opx.broken
+
