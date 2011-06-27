@@ -22,7 +22,11 @@ Config = {{
     save() = 
            void
 
+    get(c_ref : Config.ref) = 
+        /config[c_ref]
 
+    get_css(c_ref : Config.ref) = 
+        /configs[c_ref].style
 }}
 
 
