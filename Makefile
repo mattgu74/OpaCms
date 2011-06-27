@@ -5,7 +5,7 @@ EXE=opacms.exe
 
 all: $(EXE)
 
-opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx OpaCms.admin.opx src/main.opa
+opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.config.opx OpaCms.page.opx OpaCms.admin.opx src/main.opa
 	$(OPA) $^ -o $(EXE)
 
 OpaCms.user.opx: src/user.opa
