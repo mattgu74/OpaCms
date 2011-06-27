@@ -100,26 +100,6 @@ pre \{
      padding: 3px;
 \}
 
-.button, input[type=submit] \{
-  background: #B30A0A;
-  border:0;
-  text-align:center;
-  color:white;
-  border-radius: 0.3em 0.3em 0.3em 0.3em;
-  -webkit-border-radius: 0.3em 0.3em 0.3em 0.3em;
-  -moz-border-radius: 0.3em 0.3em 0.3em 0.3em;
-  text-shadow: 0 1px 0 #777777;
-  margin:5px 0;
-  padding:2px 5px;
-\}
-.button \{float:left\}
-
-input#entry \{
-     float: left;
-     margin: 5px;
-     padding: 3px;
-     width: 450px;
-\}
 
 #header \{
      margin: 0;
@@ -127,6 +107,70 @@ input#entry \{
      position: relative;
      text-align: left;
 \}
+
+#logo \{
+     background: url(\"/resources/opa-logo.png\") no-repeat scroll 0 0 transparent;
+     height: 41px;
+     margin: 5px 0 15px;
+     width: 100px;
+\}
+
+#page_header \{
+     text-align: center;
+\}
+
+#page_wrap \{
+ width: 90%;
+ margin: auto;
+ padding: 0;
+\}
+
+#page_content \{
+     margin: 0px;
+     padding: 20px;
+ display: block;
+ margin-left: 250px;
+ border-color: #E8EEFF;
+ border-width: 3px;
+ border-top-style:solid;
+ border-right-style:solid;
+\}
+
+#page_sidebar \{
+ margin: 0;
+ padding: 10px;
+ display: block;
+ float: left;
+ width: 200px;
+ text-align: left;
+ border-color: #E8EEFF;
+ border-width: 3px;
+ border-top-style:solid;
+ border-right-style:solid;
+\}
+
+
+#page_footer \{
+    text-align: center;
+    clear: both;
+    display: block;
+    margin-top: 50px;
+    background-color: #FFF;
+\}
+
+#toolbar \{
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    text-align: right;
+\}
+
+#toolbar \{
+    float: right;
+    clear: both;
+\}
+
 ") }
         /config <- config
     | _ -> void
