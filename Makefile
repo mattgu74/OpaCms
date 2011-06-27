@@ -28,7 +28,10 @@ doc:    all
 	$(OPADOC) src -o doc
 
 new-db:	all
-	./$(EXE) --force-db-upgrade
+	./$(EXE) --db-force-upgrade
+
+run: 	all
+	./$(EXE)
 
 clean:
 	rm -rf _build _tracks
