@@ -5,13 +5,16 @@ EXE=opacms.exe
 
 all: $(EXE)
 
-opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx src/main.opa
+opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx OpaCms.admin.opx src/main.opa
 	$(OPA) $^ -o $(EXE)
 
 OpaCms.user.opx: src/user.opa
 	$(OPA) $^  --no-server --autocompile
 
 OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa
+	$(OPA) $^ --no-server --autocompile
+
+OpaCms.admin.opx: src/admin.opa
 	$(OPA) $^ --no-server --autocompile
 
 OpaCms.editor.opx: editor.opp editor/editor.opa
