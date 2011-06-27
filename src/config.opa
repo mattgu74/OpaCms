@@ -37,17 +37,12 @@ Page_config = {{
       }
 
     admin() =
+      <p onclick={_ -> /config <- default_config }> Reload the default conf </p>
       <p> Under construction... </p>
 
 }}
 
-
-
-
-init_config() = 
-    match ?/config with
-    | {none} ->
-        config : Page.config =
+default_config : Page.config =
           { title = Option.some("[OpaCms] - ");
             footer = Option.some("This website is designed with [OpaCms]");
 style = Option.some( 
@@ -172,7 +167,11 @@ pre \{
 \}
 
 ") }
-        /config <- config
+
+init_config() = 
+    match ?/config with
+    | {none} ->
+        /config <- default_config
     | _ -> void
     end
 
