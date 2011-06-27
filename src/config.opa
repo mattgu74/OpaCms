@@ -3,80 +3,94 @@
  *
  */
 
-@abstract type Config.ref = String
+package OpaCms.page
 
-type Config.t =
+type Page.config =
 {
-    style : String;
+    title : option(string);
+    footer : option(string);
+    style : option(Page_css.style);
 }
 
+// The global config
+db /config : Page.config
 
-type Config.map('a) = ordered_map(Config.ref, 'a, String.order)
-
-/configs = Config.map(Config.t)
-/configs[_] = { style = "" }
-
-
-Config = {{
+Page_config = {{
     
+    empty = { title = Option.none ; footer = Option.none ; style = Option.none } : Page.config
+
     save() = 
            void
 
-    get(c_ref : Config.ref) = 
-        /config[c_ref]
+    get_default() : Page.config = 
+        /config
 
-    get_css(c_ref : Config.ref) = 
-        /configs[c_ref].style
+    get(url) : Page.config =
+      pagec = Page_data.get_config(Page_data.mk_ref(url))
+      globalc = get_default()
+      get_value(glob, page)=
+        value=Option.default(Option.default("",glob),page) ;
+        Option.some(value)
+      { title = get_value(globalc.title,pagec.title) ;
+        footer = get_value(globalc.footer,pagec.footer) ;
+        style = Option.some(Page_css.merge(globalc.style,pagec.style)) ;
+      }
+
+    admin() =
+      <p> Under construction... </p>
+
 }}
 
 
 
 
 init_config() = 
-    match ?/configs["default"] with
+    match ?/config with
     | {none} ->
-        config : Config.t =
-          { style = 
+        config : Page.config =
+          { title = Option.some("[OpaCms] - ");
+            footer = Option.some("This website is designed with [OpaCms]");
+style = Option.some( 
 "
-body {
+body \{
     margin: 0;
     padding: 0;
     line-height: 1.4em;
-}
+\}
 
-a, a:link, a:visited {
+a, a:link, a:visited \{
     color: #0B67B2;
     text-decoration: none;
-}
+\}
 
-a:hover {
+a:hover \{
      color: #0B4D86;
      text-decoration: underline;
-}
+\}
 
-a:active {
+a:active \{
     color: #B30A0A;
-}
+\}
 
-ul {
+ul \{
     margin: 0;
     padding: 0;
     list-style-position: inside;
-}
+\}
 
-li {
+li \{
     list-style-type: disc;
     margin: 0;
     padding: 0;
-}
+\}
 
-ul li ul, ol li ol {
+ul li ul, ol li ol \{
     margin-left: 20px;
-}
+\}
 
 
 
-pre {
+pre \{
      background: none repeat scroll 0% 0% #FFFFFF;
      border-color: #C6C6C2;
      border-style: solid;
@@ -84,9 +98,9 @@ pre {
      color: #767672;
      margin: 5px 0;
      padding: 3px;
-}
+\}
 
-.button, input[type=submit] {
+.button, input[type=submit] \{
   background: #B30A0A;
   border:0;
   text-align:center;
@@ -97,24 +111,24 @@ pre {
   text-shadow: 0 1px 0 #777777;
   margin:5px 0;
   padding:2px 5px;
-}
-.button {float:left}
+\}
+.button \{float:left\}
 
-input#entry {
+input#entry \{
      float: left;
      margin: 5px;
      padding: 3px;
      width: 450px;
-}
-/***Header***/
-#header {
+\}
+
+#header \{
      margin: 0;
      padding: 10px;
      position: relative;
      text-align: left;
-}
-"
-        /configs["default"] <- config
+\}
+") }
+        /config <- config
     | _ -> void
     end
 
