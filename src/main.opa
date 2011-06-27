@@ -23,7 +23,7 @@ render_page(url : string) =
   title = Page_data.get(Page_data.mk_ref(url)).title
   // There is two css file (the first is the general css file (static))
   // The second is created dynamically with the database
-  Resource.styled_page("[OpaCms] - {title}", ["/_css_{url}.css"] ,body)
+  Resource.styled_page("{Option.default("",Page_config.get(url).title)}{title}", ["/_css_{url}.css"] ,body)
 
 urls : Parser.general_parser(http_request -> resource) =
   parser
