@@ -6,14 +6,18 @@
 
 package OpaCms.page
 
-type Page_css.propertie = { rule : string ; param : string }
+/*type Page_css.propertie = { rule : string ; param : string }
 type Page_css.properties = { apply_on : string ; prop : list(Page_css.propertie) }
-type Page_css.style = list(Page_css.properties)
+type Page_css.style = list(Page_css.properties)*/
+@abstract type Page_css.style = string
+
 
 @server Page_css = {{
 
+  empty = "" : Page_css.style
+
   to_string(style : Page_css.style) =
-    propertie_to_string(p : Page_css.propertie) =
+    /*propertie_to_string(p : Page_css.propertie) =
       "{p.rule} : {p.param};"  
     properties_to_string(p : Page_css.properties) =
       fun(v, a) =
@@ -21,11 +25,15 @@ type Page_css.style = list(Page_css.properties)
       "{p.apply_on} \{ {List.fold(fun, p.prop, "")} \}"
     fun(v, a) =
       "{properties_to_string(v)} {a}"
-    List.fold(fun, style, "")
+    List.fold(fun, style, "")*/
+    style
 
-  get(url) = 
-    style = Page_data.get_style(Page_data.mk_ref(url))
-    Resource.build_css(to_string(style))
+  merge(global : option(Page_css.style), page : option(Page_css.style)) : Page_css.style =
+    "{to_string(Option.default("", global))} {to_string(Option.default("", page))}"
+
+  get(url) =
+    style = Page_config.get(url).style 
+    Resource.build_css(to_string(Option.default(empty, style)))
 
   resource : Parser.general_parser(resource) =
     parser
