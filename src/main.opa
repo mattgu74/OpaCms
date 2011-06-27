@@ -22,7 +22,7 @@ render_page(url : string) =
   title = Page_data.get(Page_data.mk_ref(url)).title
   // There is two css file (the first is the general css file (static))
   // The second is created dynamically with the database
-  Resource.styled_page("[OpaCms] - {title}", ["/resources/css.css", "/css{url}.css"] ,body)
+  Resource.styled_page("[OpaCms] - {title}", ["/resources/css.css", "/_css_{url}.css"] ,body)
 
 urls : Parser.general_parser(http_request -> resource) =
   parser
@@ -30,7 +30,7 @@ urls : Parser.general_parser(http_request -> resource) =
   | "/user" result={User.resource} -> result
   | "/resources/nicEdit.js" .* -> 
     _req -> @static_resource("./resources/nicEdit.js")
-  | "/css" result={Page_css.resource} -> _req -> result
+  | "/_css_" result={Page_css.resource} -> _req -> result
   | url=(.*) -> 
     _req -> render_page(Text.to_string(url))
 
