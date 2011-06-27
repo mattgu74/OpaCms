@@ -82,6 +82,12 @@ User = {{
     else
       start()
 
+  admin() = 
+    if User.is_logged() then
+      <>Under construction...</>
+    else
+      loginbox()
+
   view(login : string) =
     match User_data.get(User_data.mk_ref(login)) with
      | { none } -> Resource.html("User module", <h1>Module User</h1><>Error, the user {login} does'nt exist</>)
