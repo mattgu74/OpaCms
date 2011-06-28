@@ -91,7 +91,7 @@ User = {{
   view(login : string) =
     match User_data.get(User_data.mk_ref(login)) with
      | { none } -> Resource.html("User module", <h1>Module User</h1><>Error, the user {login} does'nt exist</>)
-     | { some = u } -> Resource.html("User module", <h1>Module User</h1><>This the public profil of {login}, this page is under construction</>)
+     | { some = _ } -> Resource.html("User module", <h1>Module User</h1><>This the public profil of {login}, this page is under construction</>)
 
   loginbox() : xhtml =
     user_opt = 
