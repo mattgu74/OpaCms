@@ -15,7 +15,7 @@ type Config.t =
 db /conf : Config.t
 
 Config = {{
-    default = { site_name = "[OpaCms] - "; footer = "This website is designed with [OpaCms]"; theme = "default" : Theme.ref } : Config.t
+    default = { site_name = "[OpaCms]"; footer = "This website is designed with [OpaCms]"; theme = "default" : Theme.ref } : Config.t
 
     save() =
         void
