@@ -4,6 +4,7 @@
  */
 
 package OpaCms.page
+import stdlib.core.xhtml
 
 type Config.t = 
 {
@@ -24,9 +25,19 @@ Config = {{
     
     set_theme(name : Theme.ref) = /conf/theme <- name
 
-    admin() : xhtml = 
+    admin() : xhtml =
+      site_name_id = Dom.fresh_id()
+      footer_id = Dom.fresh_id()
+      conf = get()
       <button onclick={_ -> /conf <- default }> Reload the default conf </button>
-      <p> Under construction... </p>
+      <p>
+        Site name : <input id=#{site_name_id} 
+                           onchange={_ -> /conf <- {get() with site_name = Dom.get_value(#{site_name_id})}} 
+                           value={conf.site_name} /><br />
+        Footer : <input id=#{footer_id} 
+                        onchange={_ -> /conf <- {get() with footer = Dom.get_value(#{footer_id})}} 
+                        value={conf.footer} />
+      </p>
 }}
 
 init_config() = 
