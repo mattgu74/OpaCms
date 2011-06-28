@@ -5,6 +5,30 @@
 
 package OpaCms.page
 
+type Config.t = 
+{
+    site_name : string;
+    footer : string;
+    theme : Theme.ref
+}
+
+db /conf : Config.t
+
+Config = {{
+    default = { site_name = "[OpaCms] - "; footer = "This website is designed with [OpaCms]"; theme = "default" : Theme.ref } : Config.t
+
+    save() =
+        void
+
+    get() = /conf
+    
+    set_theme(name : Theme.ref) = /conf/theme <- name
+
+    admin() : xhtml = 
+      <button onclick={_ -> /conf <- default }> Reload the default conf </button>
+      <p> Under construction... </p>
+}}
+/*
 type Page.config =
 {
     title : option(string);
@@ -98,9 +122,10 @@ pre \{
 
 #header \{
      margin: 0;
-     padding: 10px;
-     position: relative;
+     padding: 30px;
      text-align: left;
+     color: red;
+     font-size: 300%;
 \}
 
 #logo \{
@@ -110,28 +135,32 @@ pre \{
      width: 100px;
 \}
 
-#page_header \{
-     text-align: center;
-\}
-
 #page_wrap \{
  width: 90%;
  margin: auto;
  padding: 0;
 \}
 
-#page_content \{
-     margin: 0px;
-     padding: 20px;
- display: block;
- margin-left: 250px;
- border-color: #E8EEFF;
- border-width: 3px;
- border-top-style:solid;
- border-right-style:solid;
+#page \{
+    margin: 0;
+    padding: 20px;
+    margin-left: 250px;
+    border-color: #E8EEFF;
+    border-width: 3px;
+    border-top-style:solid;
+    border-right-style:solid;
 \}
 
-#page_sidebar \{
+#page_title \{
+     text-align: left;
+\}
+
+#page_content \{
+     margin: 0;
+     padding: 0;
+\}
+
+#sidebar \{
  margin: 0;
  padding: 10px;
  display: block;
@@ -145,7 +174,7 @@ pre \{
 \}
 
 
-#page_footer \{
+#footer \{
     text-align: center;
     clear: both;
     display: block;
@@ -168,11 +197,23 @@ pre \{
 
 ") }
 
-init_config() = 
+
+init_config() =
+    do /config <- default_config
     match ?/config with
     | {none} ->
         /config <- default_config
     | _ -> void
     end
+*/
 
-do init_config()
+init_config2() = 
+    match ?/conf with
+    | {none} ->
+        /conf <- Config.default
+    | _ -> void
+    end
+
+
+//do init_config()
+do init_config2()

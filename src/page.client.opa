@@ -12,14 +12,14 @@ import stdlib.web.client
 
   load(page : Page.t, menu : xhtml) =
     do Client.setTitle("[OpaCms] - {page.title}")
-    do Dom.transform([#page_header <- <h1>{page.title}</h1>])
+    do Dom.transform([#page_title <- page.title])
     do Dom.transform([#page_content <- <>{Xhtml.of_string_unsafe(page.content)}</>])
-    do Dom.transform([#page_sidebar <- <>{menu}</>])
-    do Dom.transform([#page_footer <- <> OpaCms - Author Matthieu Guffroy</>])
+    do Dom.transform([#sidebar <- <>{menu}</>])
+    do Dom.transform([#footer <- <> OpaCms - Author Matthieu Guffroy</>])
     void
 
   get() =
-    title = Dom.get_content(#page_header)
+    title = Dom.get_content(#page_title)
     content = Editor.getContent(#page_content)
     (title, content)
     
@@ -28,8 +28,8 @@ import stdlib.web.client
     do Editor.add_toolbar() // add toolbar
     do Dom.transform([#toolbar -<- <span onclick={_ -> Dom.toggle(#tbar)}> [editor] </><span onclick={_ -> Dom.toggle(#tools)}> [params] </><br/>]) 
     do Dom.transform([#toolbar +<- <div id=#tools />])
-    do editable(#page_header, save) // #page_header is editable
-    do editable(#page_content, save) // #page_content is editable
+    do editable(#page_title, save) // #title is editable
+    do editable(#page_content, save) // #content is editable
     admin_tools(url, parent, data) // Add optional edit like url or page_parent
 
   editable(div : dom, fun) =

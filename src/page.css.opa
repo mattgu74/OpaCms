@@ -32,8 +32,7 @@ type Page_css.style = list(Page_css.properties)*/
     "{to_string(Option.default("", global))} {to_string(Option.default("", page))}"
 
   get(url) =
-    style = Page_config.get(url).style 
-    Resource.build_css(to_string(Option.default(empty, style)))
+    Resource.build_css(to_string(Theme.get(Config.get().theme)))
 
   resource : Parser.general_parser(resource) =
     parser

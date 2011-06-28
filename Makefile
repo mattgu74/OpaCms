@@ -11,7 +11,7 @@ opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx OpaCms.admin.opx s
 OpaCms.user.opx: src/user.opa
 	$(OPA) $^  --no-server --autocompile
 
-OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa src/config.opa
+OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa src/config.opa src/theme.opa
 	$(OPA) $^ --no-server --autocompile
 
 OpaCms.admin.opx: src/admin.opa

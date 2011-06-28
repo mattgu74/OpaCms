@@ -12,13 +12,12 @@ package OpaCms.page
 @abstract type Page.ref = string
 
 type Page.t = {
- title : string ;
- resume : string ;
- url : string ;
- parent_page : option(Page.ref) ;
- sub_page : list(Page.ref) ;
- content : string ;
- config : Page.config ;
+    title : string ;
+    resume : string ;
+    url : string ;
+    parent_page : option(Page.ref) ;
+    sub_page : list(Page.ref) ;
+    content : string ;
 }
 
 type Page.map('a) = ordered_map(Page.ref, 'a, String.order)
@@ -32,7 +31,6 @@ Page_data = {{
                sub_page = [] ; 
                //content = Template.text("Page not found !") 
                content = "Page not found !" ;
-               config = Page_config.empty ;
                }
 
   empty_page = { 
@@ -42,7 +40,6 @@ Page_data = {{
     parent_page = Option.none ;
     sub_page = [] ;
     content = "" ;
-    config = Page_config.empty ;
   }
 
   mk_ref( url : string ) : Page.ref =
@@ -62,8 +59,8 @@ Page_data = {{
   get( page_ref : Page.ref ) : Page.t =
     Option.default(default_page ,?/pages[page_ref])
 
-  get_config( page_ref ) =
-    Option.default(default_page.config, ?/pages[page_ref]/config)
+  /*get_config( page_ref ) =
+    Option.default(default_page.config, ?/pages[page_ref]/config)*/
 
 
 
