@@ -14,6 +14,8 @@ import stdlib.web.client
 
 type User.t = 
   {
+    nom : string
+    prenom : string
     passwd : User.passwd
   }
 
@@ -42,7 +44,9 @@ init_user()=
   match ?/users["admin"] with
     | {none} ->
         admin : User.t =
-          { passwd = Crypto.Hash.md5("admin") }
+          { nom="Administrateur" ;
+            prenom="" ;
+            passwd = Crypto.Hash.md5("admin") }
         /users["admin"] <- admin
     | _ -> void
 
@@ -84,7 +88,20 @@ User = {{
 
   admin() = 
     if User.is_logged() then
-      <>Under construction...</>
+      nom_id = Dom.fresh_id()
+      prenom_id = Dom.fresh_id()
+      ref = get_status()
+      match ref with
+         | {unlogged} -> <>Error...</>
+         | {logged=r} -> user = Option.get(User_data.get(r))
+      <p>
+        Nom : <input id=#{nom_id} 
+                           onchange={_ -> User_data.save(r, {user with nom = Dom.get_value(#{nom_id})})} 
+                           value={user.nom} /><br />
+        Prenom : <input id=#{prenom_id} 
+                           onchange={_ -> User_data.save(r, {user with prenom = Dom.get_value(#{prenom_id})})}  
+                        value={user.prenom} />
+      </p>
     else
       loginbox()
 
