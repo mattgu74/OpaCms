@@ -19,33 +19,37 @@ room = Network.cloud("room"): Network.network(message)
   conf = Option.default({url="" ; admin = {false}}, c) 
 
   default_template =     
-                   myPage = Page_data.get(Page_data.mk_ref(conf.url))
-                   menu = Page_data.get_xhtml_menu(Page_data.mk_ref(conf.url))
-                   load = match conf.admin with
-                            | {true = _} ->
-                                    { js = Editor.load ;
-                                      title = match myPage.title with
-                                                | "" -> "Titre vide"
-                                                | _ -> myPage.title
-                                              end 
-                                    }
-                            | {false} ->
-                                    { js = <></>; title = myPage.title }
-                           end
-                   <>{load.js}</>
-                   <div id=#page_wrap onready={_ -> ready()}>
-                          <div id=#page_header><h1>{load.title}</h1></div>
-                          <div id=#page_sidebar >{menu}</>
-                          <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
-                          <div id=#page_footer>{Option.default("",Page_config.get(conf.url).footer)}</div>
-                   </div> 
+               myPage = Page_data.get(Page_data.mk_ref(conf.url))
+               menu = Page_data.get_xhtml_menu(Page_data.mk_ref(conf.url))
+               load = match conf.admin with
+                        | {true = _} ->
+                                { js = Editor.load ;
+                                  title = match myPage.title with
+                                            | "" -> "Titre vide"
+                                            | _ -> myPage.title
+                                          end 
+                                }
+                        | {false} ->
+                                { js = <></>; title = myPage.title }
+                       end
+               <>{load.js}
+               <div id=#page_wrap onready={_ -> ready()}>
+                      <div id=#header>{Config.get().site_name}</div>
+                      <div id=#sidebar >{menu}</>
+                      <div id=#page>
+                           <h1 id=#page_title>{load.title}</h1>
+                           <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
+                      </div>
+                      <div id=#footer>{Config.get().footer}</div>
+               </div>
+               </>
 
   // on ready
   ready() =
     do Debug.jlog("Page_server : ready")
     do Network.add_callback(message_from_room, room)
     match conf.admin with
-      | {true = u} -> Page_client.admin_interface(save, change_url, change_parent, admin_data())
+      | {true = _} -> Page_client.admin_interface(save, change_url, change_parent, admin_data())
       | {false} -> void
 
   refresh() =
@@ -71,7 +75,7 @@ room = Network.cloud("room"): Network.network(message)
 
   save_in_db(title, content) =
     myPage = Page_data.get(Page_data.mk_ref(conf.url))
-    do Debug.jlog("try to save")
+    do Debug.jlog("try to save page")
     page = { myPage with 
                 title = title ; 
                 content = content ;
