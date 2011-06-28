@@ -89,6 +89,9 @@ room = Network.cloud("room"): Network.network(message)
         match Page_data.compare_ref(k, Page_data.mk_ref(conf.url)) with
          | {eq} -> a
          | _ -> <>{a}</><option value={k}>{v.title}</option>
+    remove_page()=
+      do Page_data.remove(conf.url)
+      Client.goto("/")
     options = Map.fold( func, Page_data.getAll(), <option value="none">  </option>)
     (<><label for="#admin_url">Url : </label>
     <input id=#admin_url value={Page_data.mk_ref(conf.url)} />
@@ -96,7 +99,7 @@ room = Network.cloud("room"): Network.network(message)
     <label for="#admin_parent">Parent page : </label>
     <select id=#admin_parent>{options}</select>
     <br/>
-    <button id=#admin_delete onclick={_->Page_data.remove(conf.url)}>Delete page</button>
+    <button id=#admin_delete onclick={_->remove_page()}>Delete page</button>
     </>
     , Option.default("none", myPage.parent_page))
 
