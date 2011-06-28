@@ -16,35 +16,46 @@ db /themes : Theme.map(Theme.t)
 
 Theme = {{
     
-    save(name : Theme.ref, theme : Theme.t) =
-        do Debug.jlog("try to save theme {name}")
-        if name != "default" : Theme.ref then
-            /themes[name] <- theme
-        else
-            Debug.jlog("default ne peut pas être modifié")
+    reset_default() : void =
+        do /themes["default"] <- default_theme
+        void
+    
+    save(t_ref : Theme.ref, theme : Theme.t) : void =
+        do Debug.jlog("try to save theme {t_ref}")
+        do /themes[t_ref] <- theme
+        void
 
-    get(name : Theme.ref) = 
+    remove(t_ref : Theme.ref) : void =
+        do Db.remove(@/themes[t_ref])
+        void
+
+    get(name : Theme.ref) : Theme.t = 
         /themes[name]
 
     editor() : xhtml =
         <div onready={_->init_editor()}>
-        <select id=#theme_editor_select onchange={_-> set_editor(Dom.get_value(#theme_editor_select))}>
+        <button id=#theme_editor_reset onclick={_->reset_default()}>Reset default theme</button>
+        <br/>
+        <select id=#theme_editor_select onchange={_->set_editor(Dom.get_value(#theme_editor_select))}>
         {Map.fold(k,v,a -> <>{a}<option>{k}</option></>, /themes, <></>)}
         </select>
+        <button id=#theme_editor_delete onclick={_->remove(Dom.get_value(#theme_editor_select))}>Delete</>
         <br/>
         <input id=#theme_editor_name type="text" /><br/>
         <textarea id=#theme_editor_content onblur={_->save(Dom.get_value(#theme_editor_name), Dom.get_value(#theme_editor_content))}></textarea>
         </div>
     
-    init_editor() =
-        set_editor(Config.get().theme)
+    init_editor() : void =
+        do set_editor(Config.get().theme)
+        void
     
-    set_editor(name : Theme.ref) =
+    set_editor(name : Theme.ref) : void =
         current_theme = get(name)
         do Config.set_theme(name)
         do Dom.set_value(#theme_editor_select, name)
         do Dom.set_value(#theme_editor_name, name)
-        Dom.set_value(#theme_editor_content, current_theme)
+        do Dom.set_value(#theme_editor_content, current_theme)
+        void
 }}
 
 default_theme = 
@@ -168,8 +179,12 @@ ul li ul, ol li ol \{
 \}
 "
 
-init_themes() = 
-    /themes["default"] <- default_theme
+init_themes() : void = 
+    do match ?/themes["default"] with
+    | {none} -> /themes["default"] <- default_theme
+    | _ -> void
+    end
+    void
 
 do init_themes()
 
