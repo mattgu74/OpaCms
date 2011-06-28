@@ -94,7 +94,10 @@ room = Network.cloud("room"): Network.network(message)
     <input id=#admin_url value={Page_data.mk_ref(conf.url)} />
     <br />
     <label for="#admin_parent">Parent page : </label>
-    <select id=#admin_parent>{options}</select></>
+    <select id=#admin_parent>{options}</select>
+    <br/>
+    <button id=#admin_delete onclick={_->Page_data.remove(conf.url)}>Delete page</button>
+    </>
     , Option.default("none", myPage.parent_page))
 
   message_from_room(msg : message)=

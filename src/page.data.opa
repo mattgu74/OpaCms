@@ -56,6 +56,9 @@ Page_data = {{
   save( url : string, page : Page.t ) : void =
     /pages[mk_ref(url)] <- page
 
+    remove( url : string) : void = 
+        Db.remove(@/pages[mk_ref(url)])
+
   get( page_ref : Page.ref ) : Page.t =
     Option.default(default_page ,?/pages[page_ref])
 

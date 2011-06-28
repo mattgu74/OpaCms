@@ -11,11 +11,13 @@ import stdlib.web.client
 @client Page_client = {{
 
   load(page : Page.t, menu : xhtml) =
-    do Client.setTitle("[OpaCms] - {page.title}")
+    //config = Config.get()
+    config = { site_name="OPACMS"; footer="footer" }
+    do Client.setTitle("config.site_name - {page.title}")
     do Dom.transform([#page_title <- page.title])
     do Dom.transform([#page_content <- <>{Xhtml.of_string_unsafe(page.content)}</>])
-    do Dom.transform([#sidebar <- <>{menu}</>])
-    do Dom.transform([#footer <- <> OpaCms - Author Matthieu Guffroy</>])
+    do Dom.transform([#sidebar <- menu])
+    do Dom.transform([#footer <- config.footer])
     void
 
   get() =
