@@ -7,9 +7,7 @@ launch : ./opacms.exe (port 8080)
          ./opacms.exe --server-port nnnn (port nnnn)
 
 The editor : 
-This project use a javascript bypass, and the editor is nicEdit.
-Warning, don't use it for a public input, javascript injection (xss fail)
-is possible. Maybe in a future release I would patch it.
+This project use temporary NiceEdit.js as a wysiwyg editor.
 
 Edit page :
 goto /user
@@ -17,4 +15,6 @@ login with admin/admin
 go back to the / page
 you can edit the page and create new one
 
-
+DEMO :
+A demo is here 
+=> http://opacmsdemo.mattgu.com
