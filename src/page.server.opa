@@ -55,7 +55,7 @@ room = Network.cloud("room"): Network.network(message)
   refresh() =
     myPage = Page_data.get(Page_data.mk_ref(conf.url))
     menu = Page_data.get_xhtml_menu(Page_data.mk_ref(conf.url))
-    Page_client.load(myPage, menu)
+    Page_client.load(myPage, menu, Config.get())
 
   change_parent() =    
     newparent = match Page_client.get_parent() with
