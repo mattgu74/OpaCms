@@ -6,8 +6,10 @@
 import OpaCms.page
 import OpaCms.user
 import OpaCms.admin
-import stdlib.core.web.server
+import stdlib.core.web.resource
 import stdlib.core
+
+base_url = Resource.base_url?""
 
 render_page(url : string) =
   status = User.get_status()
@@ -21,7 +23,7 @@ render_page(url : string) =
   title = Page_data.get(Page_data.mk_ref(url)).title
   // There is two css file (the first is the general css file (static))
   // The second is created dynamically with the database
-  Resource.styled_page("{Config.get().site_name} - {title}", ["_css_{url}.css"] ,body)
+  Resource.styled_page("{Config.get().site_name} - {title}", ["{base_url}/_css_{url}.css"] ,body)
 
 urls : Parser.general_parser(http_request -> resource) =
   parser

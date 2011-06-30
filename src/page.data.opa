@@ -8,6 +8,7 @@
 */
 
 package OpaCms.page
+import stdlib.core.web.resource
 
 @abstract type Page.ref = string
 
@@ -24,6 +25,9 @@ type Page.map('a) = ordered_map(Page.ref, 'a, String.order)
 db /pages : Page.map(Page.t)
 
 Page_data = {{
+
+ base_url = Resource.base_url?""
+
  default_page = { title = "Error 404 - Page not found" ; 
                resume = "" ; 
                url="/404" ; 
@@ -88,7 +92,7 @@ Page_data = {{
               end
         <>{acc}
         <li>
-                <a href="{p.url}" >{p.title}</a>
+                <a href="{base_url}{p.url}" >{p.title}</a>
                 {submenu}
         </li></>
     pages = Map.To.val_list(/pages)
