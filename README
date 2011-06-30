@@ -18,3 +18,39 @@ you can edit the page and create new one
 DEMO :
 A demo is here 
 => http://opacmsdemo.mattgu.com
+
+
+=== TUTO APACHE ===
+
+== 1. Use a subdomain ==
+This my example config file for opacmsdemo.mattgu.com :
+
+<VirtualHost 62.193.245.98:80>
+	ServerName   opacmsdemo.mattgu.com:80
+	ProxyPass / http://127.0.0.1:8080/
+	ProxyPassReverse / http://127.0.0.1:8080/
+	ProxyPreserveHost on
+	ProxyRequests On
+	ProxyVia On
+
+	<Proxy *>
+		Order allow,deny
+		Allow from all
+	</Proxy>
+</VirtualHost>
+
+
+==2. Use an alias ==
+If you want to get an alias (example: www.mysite.com/opacms)
+You must have :
+
+ProxyPass /opacms http://localhost:8080/opacms
+ProxyPassReverse /opacms http://localhost:8080/opacms
+ProxyPreserveHost on
+ProxyVia On
+
+The Two first line are indeed very usefull,
+the ProxyPreserveHost is also really import for OPA. If not you could have some problem.
+I don't know if the ProxyVia is important you could try without.
+Then you need to launch your server with the option (--base-url opacms).
+WARNING: This option is really new in opa, then get the last version of OPA, and then keep in mind it is experimental...
