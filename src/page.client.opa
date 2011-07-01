@@ -13,7 +13,7 @@ import stdlib.web.client
   load(page : Page.t, menu : xhtml, config) =
     do Client.setTitle("{config.site_name} - {page.title}")
     do Dom.transform([#page_title <- page.title])
-    do Dom.transform([#page_content <- <>{Xhtml.of_string_unsafe(page.content)}</>])
+    do Dom.transform([#page_content <- <>{Xhtml.of_string(page.content)}</>])
     do Dom.transform([#sidebar <- menu])
     do Dom.transform([#footer <- config.footer])
     void
