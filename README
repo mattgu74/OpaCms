@@ -7,13 +7,21 @@ launch : ./opacms.exe (port 8080)
          ./opacms.exe --server-port nnnn (port nnnn)
 
 The editor : 
-This project use temporary NiceEdit.js as a wysiwyg editor.
+Now the wysiwyg editor is TinyMCE.
 
 Edit page :
-goto /user
+goto /user or /admin
 login with admin/admin
 go back to the / page
 you can edit the page and create new one
+
+WARNING :
+The opacms is functionnal with GoogleChrome, normally it must be compatible with all navigator.
+Please let me informed if you experience problems with one navigator...
+
+Bug knonw :
+* With firefox, the page does'nt refresh, when you edit it or when some admin modify it...
+You must refresh it manually, it's not critical.... But it make me unhappy :(
 
 DEMO :
 A demo is here 
