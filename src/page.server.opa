@@ -38,7 +38,7 @@ room = Network.cloud("room"): Network.network(message)
                       <div id=#sidebar >{menu}</>
                       <div id=#page>
                            <h1 id=#page_title>{load.title}</h1>
-                           <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
+                           <div id=#page_content >{Xhtml.of_string(myPage.content)}</div>
                       </div>
                       <div id=#footer>{Config.get().footer}</div>
                </div>
