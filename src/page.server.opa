@@ -28,9 +28,12 @@ room = Network.cloud("room"): Network.network(message)
                                             | "" -> "Titre vide"
                                             | _ -> myPage.title
                                           end 
+                                  edit = <div id=#Edit />
                                 }
                         | {false} ->
-                                { js = <></>; title = myPage.title }
+                                { js = <></>; 
+                                  title = myPage.title 
+                                  edit = <></>}
                        end
                <>{load.js}
                <div id=#page_wrap onready={_ -> ready()}>
@@ -38,7 +41,8 @@ room = Network.cloud("room"): Network.network(message)
                       <div id=#sidebar >{menu}</>
                       <div id=#page>
                            <h1 id=#page_title>{load.title}</h1>
-                           <div id=#page_content >{Xhtml.of_string(myPage.content)}</div>
+                           <div id=#page_content >{Xhtml.of_string_unsafe(myPage.content)}</div>
+                           {load.edit}
                       </div>
                       <div id=#footer>{Config.get().footer}</div>
                </div>
@@ -49,7 +53,7 @@ room = Network.cloud("room"): Network.network(message)
     do Debug.jlog("Page_server : ready")
     do Network.add_callback(message_from_room, room)
     match conf.admin with
-      | {true = _} -> Page_client.admin_interface(save, change_url, change_parent, admin_data())
+      | {true = _} -> Page_client.admin_interface(change_url, change_parent, admin_data() )
       | {false} -> void
 
   refresh() =
@@ -68,10 +72,6 @@ room = Network.cloud("room"): Network.network(message)
     url = Page_client.get_url()
     do Page_data.move(Page_data.mk_ref(conf.url), Page_data.mk_ref(url))
     Network.broadcast({move_from = conf.url ; move_to = url}, room)
-
-  save() =
-    (title, content) = Page_client.get()
-    save_in_db(title, content)
 
   save_in_db(title, content) =
     myPage = Page_data.get(Page_data.mk_ref(conf.url))
@@ -99,6 +99,7 @@ room = Network.cloud("room"): Network.network(message)
     <label for="#admin_parent">Parent page : </label>
     <select id=#admin_parent>{options}</select>
     <br/>
+    <button id=#admin_edit onclick={_->Page_client.edit(Page_data.get(Page_data.mk_ref(conf.url)), save_in_db)}>Edit page</button><br/>
     <button id=#admin_delete onclick={_->remove_page()}>Delete page</button>
     </>
     , Option.default("none", myPage.parent_page))

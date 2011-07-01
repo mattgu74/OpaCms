@@ -19,6 +19,9 @@ Editor = {{
   @client init()=
      ((%% editor.init %%)())
 
+  @client getContent(dom : string)=
+     ((%% editor.getContent %%)(dom))
+
   tiny_mce = @static_resource_directory("tinymce")
 
 }}

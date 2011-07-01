@@ -4,6 +4,12 @@
 {
     tinyMCE.init({
 	mode: "textareas",
-	theme: "simple"
+	theme: "advanced"
     });
+}
+
+##register getContent: string -> string
+##args(a)
+{
+    return tinyMCE.get(a).getContent();
 }
