@@ -6,6 +6,7 @@
 import OpaCms.page
 import OpaCms.user
 import OpaCms.admin
+import OpaCms.editor
 import stdlib.core.web.resource
 import stdlib.core
 
@@ -30,10 +31,8 @@ urls : Parser.general_parser(http_request -> resource) =
   | {Rule.debug_parse_string(s -> Log.notice("URL",s))} Rule.fail -> error("")  
   | "/user" result={User.resource} -> result
   | "/admin" result={Admin.resource} -> result
-  | "/resources/nicEdit.js" .* -> 
-    _req -> @static_resource("./resources/nicEdit.js")
   | "/_css_" result={Page_css.resource} -> _req -> result
   | url=(.*) -> 
     _req -> render_page(Text.to_string(url))
 
-server = Server.make(Resource.add_auto_server(@static_resource_directory("resources"), urls))
+server = Server.make(Resource.add_auto_server(Editor.tiny_mce, urls))
