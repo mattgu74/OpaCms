@@ -24,7 +24,14 @@ import stdlib.web.client
     do Dom.transform([#toolbar +<- <div id=#tools />])
     admin_tools(url, parent, data) // Add optional edit like url or page_parent
 
-  edit(page : Page.t, save_in_db) =
+  edit() =
+    //Hide the view
+    do Dom.hide(#page_title)
+    do Dom.hide(#page_content)
+    do Dom.show(#Edit)
+    void
+
+  init_edit(page, save_in_db)=
     save()=
       get() =
         title = Dom.get_value(#edit_page_title)
@@ -32,10 +39,17 @@ import stdlib.web.client
         (title, content)
       (title, content) = get()
       save_in_db(title, content)
-    //title
+    hide()=
+      do Dom.hide(#Edit)
+      do Dom.show(#page_title)
+      do Dom.show(#page_content)
+      void
+    //title    
+    do hide()
     do Dom.transform([#Edit <- <>Title : <input id=#edit_page_title onchange={_ -> save()} value={page.title} /></>])
     //content
-    do Dom.transform([#Edit +<- <><textarea id=#edit_page_content >{Xhtml.of_string(page.content)}</textarea><br/><button onclick={_ -> save()}>Save</button></> ])
+    do Dom.transform([#Edit +<- <><textarea id=#edit_page_content >{Xhtml.of_string(page.content)}</textarea></>])
+    do Dom.transform([#Edit +<- <><br/><button onclick={_ -> save()}>Save</button><button onclick={_ -> hide()}>Exit editing mode</button></> ])
     Editor.init()
 
   admin_tools(url, parent, data) = 
