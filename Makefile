@@ -11,17 +11,17 @@ opacms.exe: OpaCms.editor.opx OpaCms.user.opx OpaCms.page.opx OpaCms.admin.opx s
 OpaCms.user.opx: src/user.opa
 	$(OPA) $^  --no-server --autocompile
 
-OpaCms.page.opx: src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa src/config.opa src/theme.opa
+OpaCms.page.opx: OpaCms.editor.opx src/page.data.opa src/page.client.opa src/page.server.opa src/page.css.opa src/config.opa src/theme.opa
 	$(OPA) $^ --no-server --autocompile
 
-OpaCms.admin.opx: OpaCms.page.opx src/admin.opa
+OpaCms.admin.opx: OpaCms.editor.opx OpaCms.page.opx src/admin.opa
 	$(OPA) $^ --no-server --autocompile
 
 OpaCms.editor.opx: editor.opp editor/editor.opa
 	$(OPA) $^ --no-server --autocompile
 
 editor.opp: editor/editor.js
-	opa-plugin-builder $^ -o $@
+	opa-plugin-builder $^ -o $@ 
 
 doc:    all
 	$(OPA) src/*.opa --api
