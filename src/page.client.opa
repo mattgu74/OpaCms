@@ -48,7 +48,7 @@ import stdlib.web.client
     do hide()
     do Dom.transform([#Edit <- <>Title : <input id=#edit_page_title onchange={_ -> save()} value={page.title} /></>])
     //content
-    do Dom.transform([#Edit +<- <><textarea id=#edit_page_content >{Xhtml.of_string(page.content)}</textarea></>])
+    do Dom.transform([#Edit +<- <><textarea id=#edit_page_content style="width:100%">{Xhtml.of_string(page.content)}</textarea></>])
     do Dom.transform([#Edit +<- <><br/><button onclick={_ -> save()}>Save</button><button onclick={_ -> hide()}>Exit editing mode</button></> ])
     Editor.init()
 
