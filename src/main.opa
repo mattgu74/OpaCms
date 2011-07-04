@@ -26,7 +26,7 @@ render_page(url : string) =
   // The second is created dynamically with the database
   Resource.styled_page("{Config.get().site_name} - {title}", ["{base_url}/_css_{url}.css"] ,body)
 
-ga_js = 
+ga_js = //Please change the account number, this is the opacmsdemo number...
 "
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-5768473-3']);
