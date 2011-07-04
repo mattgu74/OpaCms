@@ -140,5 +140,18 @@ Page_data = {{
             // Add the ref to the subpage list of the new parent
             /pages[pref]/sub_page <- List.add(ref, /pages[pref]/sub_page)
       /pages[ref]/parent_page <- parent
+
+    clean_child(ref : Page.ref) =
+      sub_page = /pages[ref]/sub_page
+      func(ref, acc)=
+        sub = ?/pages[ref]
+        if Option.is_none(sub) then
+          acc
+        else
+          List.add(ref, acc)
+      new_sub = List.fold(func,sub_page,[])
+      /pages[ref]/sub_page <- new_sub
 }}
 
+// Could be removed in the future, but now we must clean the old db... (like the opacmsdemo :) )
+do  List.fold((key, _ -> Page_data.clean_child(key)),Map.To.key_list(/pages), void)
