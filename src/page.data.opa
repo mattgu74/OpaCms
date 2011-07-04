@@ -61,7 +61,9 @@ Page_data = {{
     /pages[mk_ref(url)] <- page
 
   remove( url : string) : void = 
-    Db.remove(@/pages[mk_ref(url)])
+    parent = get(mk_ref(url)).parent_page
+    do Db.remove(@/pages[mk_ref(url)])
+    if Option.is_some(parent) then clean_child(Option.get(parent))
 
   get( page_ref : Page.ref ) : Page.t =
     Option.default(default_page ,?/pages[page_ref])
@@ -141,8 +143,8 @@ Page_data = {{
             /pages[pref]/sub_page <- List.add(ref, /pages[pref]/sub_page)
       /pages[ref]/parent_page <- parent
 
-    clean_child(ref : Page.ref) =
-      sub_page = /pages[ref]/sub_page
+    clean_child(page_ref : Page.ref) =
+      sub_page = /pages[page_ref]/sub_page
       func(ref, acc)=
         sub = ?/pages[ref]
         if Option.is_none(sub) then
@@ -150,7 +152,7 @@ Page_data = {{
         else
           List.add(ref, acc)
       new_sub = List.fold(func,sub_page,[])
-      /pages[ref]/sub_page <- new_sub
+      /pages[page_ref]/sub_page <- new_sub
 }}
 
 // Could be removed in the future, but now we must clean the old db... (like the opacmsdemo :) )
