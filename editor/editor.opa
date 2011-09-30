@@ -5,7 +5,7 @@
  */
 
 /*
- This module use the wysiwyg editor NicEdit.js
+ This module use the wysiwyg editor tinyMCE
 */
 
 package OpaCms.editor
