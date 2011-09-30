@@ -7,21 +7,14 @@ launch : ./opacms.exe (port 8080)
          ./opacms.exe --server-port nnnn (port nnnn)
 
 The editor : 
-Now the wysiwyg editor is TinyMCE.
+The wysiwyg editor is TinyMCE.
+It's done using some bypass
 
 Edit page :
 goto /user or /admin
-login with admin/admin
+login with admin:admin
 go back to the / page
 you can edit the page and create new one
-
-WARNING :
-The opacms is functionnal with GoogleChrome, normally it must be compatible with all navigator.
-Please let me informed if you experience problems with one navigator...
-
-Bug knonw :
-* With firefox, the page does'nt refresh, when you edit it or when some admin modify it...
-You must refresh it manually, it's not critical.... But it make me unhappy :(
 
 DEMO :
 A demo is here 
@@ -33,7 +26,7 @@ A demo is here
 == 1. Use a subdomain ==
 This my example config file for opacmsdemo.mattgu.com :
 
-<VirtualHost 62.193.245.98:80>
+<VirtualHost *:80>
 	ServerName   opacmsdemo.mattgu.com:80
 	ProxyPass / http://127.0.0.1:8080/
 	ProxyPassReverse / http://127.0.0.1:8080/
@@ -61,4 +54,21 @@ The Two first line are indeed very usefull,
 the ProxyPreserveHost is also really import for OPA. If not you could have some problem.
 I don't know if the ProxyVia is important you could try without.
 Then you need to launch your server with the option (--base-url opacms).
-WARNING: This option is really new in opa, then get the last version of OPA, and then keep in mind it is experimental...
+
+==== Solution with nginx ====
+
+Here is my nginx file, for the demo :
+
+server {
+  server_name opacmsdemo.mattgu.com;
+
+  location / {
+    proxy_set_header  Host                opacmsdemo.mattgu.com;
+    proxy_set_header  X-Real-IP           $remote_addr;
+    proxy_set_header  X-Forwarded-For     $proxy_add_x_forwarded_for;
+    proxy_pass                            http://10.0.0.106;
+  }
+}
+
+http://10.0.0.106 is where is launched your application.
+It could be somthing like : http://localhost:8080
